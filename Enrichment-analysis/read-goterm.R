@@ -46,10 +46,5 @@ frequency_DE <- count(subgo_DE, mol.function)
 
 #f_identified_proteins <- as.data.frame(frequency)
 f_DE <- as.data.frame(frequency_DE)
-#mt <- goterm[order(match(row.names(order_results), goterm$id)), ]
 
-# select identified proteins in goterm dataset
-# inner_join(df1, df2, by = 'id')
-
-#goterm[match(row.names(order_results), 
 
