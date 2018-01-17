@@ -1,5 +1,3 @@
-
-#install.packages("GOplot")
 library(GOplot)
 library(dplyr)
 library(gtools)
@@ -7,7 +5,6 @@ library(mosaic)
 
 results2 <- cbind(id = row.names(results), results)
 
-#goterm
 
 category_process <- select(category, id = GeneID, Pathway, Process)
 
@@ -34,10 +31,10 @@ d1 <- cbind(d, rep(sum(go$n), each = nrow(d)),
             rep(sum(de_go$n), each = nrow(d)))
 
 
-colnames(d1) <- c('pathway', 'x', 'm', 'n', 'k')
+colnames(d1) <- c('id', 'x', 'm', 'n', 'k')
 
 d2 <- select(d1, x, m, n, k)
-row.names(d2) <- d1$pathway
+row.names(d2) <- d1$id
 
 #x1 <- apply(d2, 1, function(row) log2(row[1]))
 #m1 <- apply(d2, 1, function(row) log2(row[2]))
@@ -49,17 +46,12 @@ row.names(d2) <- d1$pathway
 
 #options(digits = 10)
 
-go_pvals <- apply(d2, 1, function(row) phyper(row[1], row[2], row[3], row[4], 
+go_pvals <- apply(d2, 1, function(row) phyper(row[1]-1, row[2], row[3], row[4], 
                                              lower.tail = FALSE, log.p = FALSE)) # default, test depletion
+
 
 go_qvals <- p.adjust(go_pvals, 'fdr')
 d3 <- cbind(d2, go_pvals, go_qvals)
-
-# empty name, rename to "unknown"
-row.names(d3)[1] <- "Unknown"
-
-# 2.2e-16
-
 
 fc <- apply(d3, 1, function(row) foldchange(row[1]/row[4], 
                                             row[2]/row[3]))
@@ -78,20 +70,6 @@ gobubble <- as.data.frame(cbind(category = 1:nrow(d3), id = 1:nrow(d3), term = r
                                 q = log, zscore = zscores, count = nrow(d3)))
 
 
-#gobubble <- na.omit(gobubble)
-
-#d7 <- apply(gobubble, 2, function(x) x[is.finite(x)])
-#d7 <- as.data.frame(d7)
-
-
-
-
-#gobubble_clean <- gobubble[!is.infinite(gobubble$q), ]
-
-#GOBubble(gobubble)
-
-#plot(gobubble$zscore, gobubble$q)
-#
 
 
 

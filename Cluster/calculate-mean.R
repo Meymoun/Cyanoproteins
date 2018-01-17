@@ -1,4 +1,3 @@
-
 library(tidyr)
 library(dplyr)
 
@@ -11,22 +10,8 @@ m_for_hm <- function(x) {
   y <- c(x60, x100, x200, x300, x1000)
   }
 
-z <- apply(msdata, 1, m_for_hm)
-zt <- t(z)
+mean_intensities <- apply(msdata, 1, m_for_hm2)
+mean_intensities <- t(mean_intensities)
 
-colnames(zt) <- c('x60', 'x100', 'x200', 'x300', 'x1000')
-
-zdf <- as.data.frame(zt)
-colnames(zdf) <- c('x60', 'x100', 'x200', 'x300', 'x1000')
-
-protein2 <- rownames(zdf)
-
-zdf2 <- cbind(protein2, zdf)
-tidy2 <- gather(zdf2, condition, intensity, x60:x1000)
-
-tidier2 <- arrange(tidy2, protein2)
-
-protein_group <- tidier2 %>%
-  group_by(protein2) %>%
-  summarise(ano <- aov(protein2))
-
+mean_intensities <- as.data.frame(mean_intensities)
+colnames(mean_intensities) <- c('x60', 'x100', 'x200', 'x300', 'x1000')

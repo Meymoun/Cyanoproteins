@@ -1,22 +1,13 @@
+pvals <- apply(gsa, 1, function(row) phyper(
+  row[1]-1, row[5], row[4], row[2], 
+  lower.tail = FALSE)) # TRUE = test depletion, FALSE = test enrichment
 
-pvals <- apply(gsa, 1, function(row) phyper(row[1], row[3], row[4], row[2], 
-                                             lower.tail = TRUE)) # default, test depletion
+qvals <- p.adjust(pvals2, 'fdr')
+enrichment_analysis <- cbind(enrichment_analysis, pvals, qvals)
 
-qvals <- p.adjust(pvals, 'fdr')
-gsa <- cbind(gsa, pvals, qvals)
+# overview of all 
+enrichment_analysis_order <- enrichment_analysis[order(
+  enrichment_analysis$qvals, decreasing = FALSE), ]
 
-#phyper(48, 97, 1395, 724) # ??
-
-
-pvals2 <- apply(gsa, 1, function(row) phyper(row[1], row[5], row[4], row[2], 
-                                             lower.tail = FALSE)) # default, test depletion
-
-
-qvals2 <- p.adjust(pvals2, 'fdr')
-gsa <- cbind(gsa, pvals2, qvals2)
-
-
-gsa_order <- gsa[order(gsa$qvals2, decreasing = FALSE), ]
-
-
-sign_enriched <- gsa_order[1:6, 9:10]
+# select q-values < 0.05
+significant_enriched <- enrichment_analysis[enrichment_analysis$qvals < 0.05, ]

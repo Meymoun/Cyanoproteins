@@ -1,9 +1,5 @@
-
 library(ggplot2)
 library(RColorBrewer)
-
-# x$name <- factor(x$name, levels = x$name[order(x$val)]
-#g$process <- g$process[order(g$process)]
 
 ggplot(g, aes(x = process, y = value, 
               fill = factor(group, 
@@ -17,7 +13,4 @@ ggplot(g, aes(x = process, y = value,
   theme(legend.position= c(0.77, 0.85), 
         aspect.ratio = 1.2)
   
-
 dev.off()
-
-#'Total known proteome', 'Total DE proteome')) +

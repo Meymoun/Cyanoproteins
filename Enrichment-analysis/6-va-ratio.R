@@ -1,3 +1,4 @@
+library(ggplot2)
 
 # connect each protein to localization
 # gene id and localization: cytoplasmic, cytoplasmic membrane,
@@ -5,7 +6,6 @@
 
 clean_category <- category %>%
   select('geneID' = GeneID, Final_Localization)
-
 
 # get the mean for each protein in each intensity
 x60 <- apply(msdata[, 1:4], 1, mean)
@@ -31,9 +31,7 @@ mb <- na.omit(membrane)
 mb_nr <- sapply(mb, as.numeric)
 mb_sum <- apply(mb_nr, 2, sum)
 
-
 rt <- as.data.frame(cbind(ct_sum, mb_sum))
-
 
 rt <- mutate(rt, ratio = ct_sum / mb_sum)
 ratio2 <- mutate(rt, ratio = mb_sum /ct_sum)
@@ -48,17 +46,11 @@ ratio4 <- mutate(ratio,
                  normalized = 
                    ratio$ratio / ratio$ratio[1])
 
-plot(ratio2$ratio)
-
-library(ggplot2)
-
 ggplot(ratio4, aes(x=i, y=normalized)) + 
   geom_point(size=2) +
   labs(title = "With normalized ratio", x = 'Light intensity', y = 'Volume/surface ratio') +
   theme(aspect.ratio = 1)
   
-
-
 ggplot(ratio4, aes(x=i, y=ratio)) + 
   geom_point(size=2) +
   labs(x = 'Light intensity', y = 'Volume/surface ratio') +

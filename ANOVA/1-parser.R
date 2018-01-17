@@ -13,6 +13,5 @@ goterm_csv <- read.csv(file.path("input", "goterm.csv"),
 category_loc <- read.csv(file.path("input", "category_loc.csv"), 
                          sep = ",", stringsAsFactors = FALSE)
 
-
 category <- category_loc
 

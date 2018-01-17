@@ -1,4 +1,3 @@
-
 library(dplyr)
 library(tidyr)
 
@@ -26,25 +25,14 @@ ht_anova_result <- apply(msdata, 1, ht_anova)
 results <- as.data.frame(t(ht_anova_result))
 colnames(results) <- c('f.value', 'p.value')
 
-# wanted to use dplyr functions which drops the rownames, 
-# therefore added them as a column
-#results2 <- as.data.frame(cbind(id = rownames(results), results))
-
-# create new column based on old, then arrange according to the new column 
-# (the q-value)
-
+# FRD adjusted p-value, then arrange according to the q-value
 q.value <- p.adjust(results$p.value, "fdr")
 results <- cbind(results, q.value)
 order_results <- results[order(results$q.value), ]
-
-#order_results <- results2 %>% 
-  #mutate(q.value = p.adjust(results2$p.value, "fdr")) %>%
-  #arrange(q.value)
 
 # proteins found to be differentially expressed
 hits <- as.numeric(order_results$q.value) <= 0.05
 de_proteins <- order_results[hits, ]
 
 significant_proteins <- row.names(de_proteins)
-top50 <- significant_proteins[1:50] 
 
